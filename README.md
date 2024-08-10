@@ -6,6 +6,12 @@ Duration:June to August
 Mentor:Muzammil
 OVERVIEW OF THE PROJECT
 PROJECT NAME: To-Do List Web Application
+![Screenshot 2024-08-11 000138](https://github.com/user-attachments/assets/a3821a7d-3882-4056-bee4-70bdf82d5aa6)
+![Screenshot 2024-08-11 000209](https://github.com/user-attachments/assets/c7aa48c6-d6d1-4a6d-9d60-e9e07d7a39b2)
+![Screenshot 2024-08-11 000252](https://github.com/user-attachments/assets/9233435b-015d-406b-8631-19d69add1a91)
+![Screenshot 2024-08-11 000318](https://github.com/user-attachments/assets/1db1eb2f-6b6c-48c8-8187-71d442c333cb)
+![Screenshot 2024-08-11 000305](https://github.com/user-attachments/assets/f40969d0-8ea7-40c9-9c69-b022bc23005a)
+
 PURPOSE:
 The To-Do List Web Application is designed to help users efficiently manage their tasks. Users can add tasks, set deadlines, mark tasks as completed, and categorize them based on their status (In Progress or Done). Additionally, users can view categorized tasks in separate tabs, providing a streamlined overview of their progress.
 
