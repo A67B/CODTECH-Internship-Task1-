@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+    <div class="menu-icon" id="menu-icon">
+        &#9776; <!-- This is the menu icon -->
+    </div>
+    <div class="w3-sidebar w3-bar-block w3-card sidebar" id="mySidebar">
+        <div class="menu-icon" id="sidebar-menu-icon">
+            &#9776; <!-- This is the menu icon inside the sidebar -->
+        </div>
+        <div class="sidebar-content">
+            <h3 class="w3-bar-item">Categories</h3>
+            <label class="w3-bar-item w3-button w3-orange">In Progress</label>
+            <label class="w3-bar-item w3-button w3-green">Done</label>
+        </div>
+    </div>
+    <div class="container" id="main">
+        <h1>To-Do List</h1>
+        <div class="input-container">
+            <input type="text" id="new-task" placeholder="Add a new task...">
+            <input type="datetime-local" id="task-date">
+            <button id="add-task-button" class="w3-button w3-square w3-orange">Add</button>
+        </div>
+        <ul id="task-list"></ul>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+/* General form container styling */
+.form-container {
+  width: 300px;
+  margin: 100px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Heading styling */
+.form-container h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+/* Input field styling */
+.form-container label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.form-container input[type="text"],
+.form-container input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* Button styling */
+.form-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #28a745;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.form-container button:hover {
+  background-color: #218838;
+}
+
+/* Paragraph and link styling */
+.form-container p {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.form-container a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.form-container a:hover {
+  text-decoration: underline;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const addTaskButton = document.getElementById("add-task-button");
+    const taskInput = document.getElementById("new-task");
+    const taskDate = document.getElementById("task-date");
+    const taskList = document.getElementById("task-list");
+    const menuIcon = document.getElementById("menu-icon");
+    const sidebarMenuIcon = document.getElementById("sidebar-menu-icon");
+    const sidebar = document.getElementById("mySidebar");
+    const mainContent = document.getElementById("main");
+    const inProgressLabel = document.querySelector(".w3-orange");
+    const doneLabel = document.querySelector(".w3-green");
+
+    addTaskButton.addEventListener("click", function() {
+        const taskText = taskInput.value.trim();
+        const taskDateTime = taskDate.value;
+
+        if (taskText !== "" && taskDateTime !== "") {
+            const taskItem = document.createElement("li");
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.className = "task-checkbox";
+
+            const taskLabel = document.createElement("span");
+            taskLabel.textContent = `${taskText} (Due: ${new Date(taskDateTime).toLocaleString()})`;
+
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.className = "delete";
+            deleteButton.addEventListener("click", function() {
+                taskList.removeChild(taskItem);
+            });
+
+            taskItem.appendChild(checkbox);
+            taskItem.appendChild(taskLabel);
+            taskItem.appendChild(deleteButton);
+            taskList.appendChild(taskItem);
+
+            taskInput.value = "";
+            taskDate.value = "";
+        }
+    });
+
+    taskInput.addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+            addTaskButton.click();
+        }
+    });
+
+    function toggleSidebar() {
+        if (sidebar.style.transform === "translateX(0px)") {
+            sidebar.style.transform = "translateX(-250px)";
+            mainContent.style.marginLeft = "0";
+        } else {
+            sidebar.style.transform = "translateX(0px)";
+            mainContent.style.marginLeft = "250px";
+        }
+    }
+
+    menuIcon.addEventListener("click", toggleSidebar);
+    sidebarMenuIcon.addEventListener("click", toggleSidebar);
+
+    function openTasksInNewTab(filter) {
+        const tasks = document.querySelectorAll("#task-list li");
+        let filteredTasks = [];
+        let title = "";
+        let bgColor = "";
+
+        tasks.forEach(task => {
+            const checkbox = task.querySelector(".task-checkbox");
+            const taskText = task.querySelector("span").textContent;
+
+            if (filter === "in-progress" && !checkbox.checked) {
+                filteredTasks.push(taskText);
+                title = "In Progress";
+                bgColor = "purple"; // Background color for "In Progress"
+            } else if (filter === "done" && checkbox.checked) {
+                filteredTasks.push(taskText);
+                title = "Done";
+                bgColor = "green"; // Background color for "Done"
+            }
+        });
+
+        const newTab = window.open();
+        newTab.document.write("<html><head><title>" + title + "</title></head><body style='background-color: " + bgColor + "; color: white;'>");
+        newTab.document.write("<h1>" + title + "</h1><ul>");
+        filteredTasks.forEach(task => newTab.document.write(`<li>${task}</li>`));
+        newTab.document.write("</ul></body></html>");
+        newTab.document.close();
+    }
+
+    inProgressLabel.addEventListener("click", function() {
+        openTasksInNewTab("in-progress");
+    });
+
+    doneLabel.addEventListener("click", function() {
+        openTasksInNewTab("done");
+    });
+});
